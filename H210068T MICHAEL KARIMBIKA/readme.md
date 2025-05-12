@@ -23,3 +23,9 @@ This is the Django backend for the E-commerce Recommendation System. It provides
 pip install -r requirements.txt
 3. start the django development server using manage.py
 py manage.py runserver
+4. Open frontend folder
+5. install angular cli
+6. run npm install
+7. start development server using 
+ng s -o
+or simply navigate to https://e-recomandationsys.vercel.app makesure the backend is running first
