@@ -1,0 +1,262 @@
+.payment-success-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 2rem;
+    background-color: #f8f9fa;
+  }
+  
+  .success-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    padding: 2.5rem;
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .success-icon, .error-icon {
+    margin-bottom: 1.5rem;
+    
+    svg {
+      color: #4caf50;
+    }
+  }
+  
+  .error-icon svg {
+    color: #f44336;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+    font-weight: 700;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    color: #333;
+    font-weight: 600;
+    text-align: left;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  
+  .success-message, .error-message {
+    font-size: 1.1rem;
+  }
+  
+  .order-details {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: left;
+    
+    .order-info {
+      margin-bottom: 1.5rem;
+      
+      p {
+        margin-bottom: 0.5rem;
+      }
+    }
+    
+    .order-items {
+      margin-bottom: 1.5rem;
+      
+      .item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #eee;
+        
+        &:last-child {
+          border-bottom: none;
+        }
+        
+        .item-details {
+          .item-name {
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+          }
+          
+          .item-quantity {
+            color: #777;
+            font-size: 0.9rem;
+            margin-bottom: 0;
+          }
+        }
+        
+        .item-price {
+          font-weight: 600;
+          margin-bottom: 0;
+        }
+      }
+    }
+    
+    .order-totals {
+      border-top: 2px solid #eee;
+      padding-top: 1rem;
+      
+      .total-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        
+        &.grand-total {
+          font-weight: 700;
+          font-size: 1.1rem;
+          margin-top: 0.5rem;
+          padding-top: 0.5rem;
+          border-top: 1px solid #eee;
+        }
+      }
+    }
+  }
+  
+  .next-steps {
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: left;
+    
+    ul {
+      padding-left: 1.5rem;
+      margin-bottom: 0;
+      
+      li {
+        margin-bottom: 0.5rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    
+    button {
+      padding: 0.875rem 1.75rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &.primary-button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        
+        &:hover {
+          background-color: #43a047;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+        }
+      }
+      
+      &.secondary-button {
+        background-color: white;
+        color: #4caf50;
+        border: 2px solid #4caf50;
+        
+        &:hover {
+          background-color: #f1f8e9;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+  
+  .redirect-notice {
+    font-size: 0.9rem;
+    color: #999;
+    
+    p {
+      margin-bottom: 0;
+      
+      a {
+        color: #4caf50;
+        text-decoration: underline;
+        cursor: pointer;
+        
+        &:hover {
+          color: #43a047;
+        }
+      }
+    }
+  }
+  
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 0;
+    
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(76, 175, 80, 0.2);
+      border-radius: 50%;
+      border-top-color: #4caf50;
+      animation: spin 1s ease-in-out infinite;
+      margin-bottom: 1.5rem;
+    }
+    
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+    
+    p {
+      font-size: 1.1rem;
+      color: #666;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .success-card {
+      padding: 1.5rem;
+    }
+    
+    .action-buttons {
+      flex-direction: column;
+      
+      button {
+        width: 100%;
+      }
+    }
+    
+    h1 {
+      font-size: 1.6rem;
+    }
+    
+    h2 {
+      font-size: 1.3rem;
+    }
+  }
+  

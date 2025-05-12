@@ -1,0 +1,195 @@
+.payment-cancel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 2rem;
+    background-color: #f8f9fa;
+  }
+  
+  .cancel-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    padding: 2.5rem;
+    max-width: 700px;
+    width: 100%;
+    text-align: center;
+  }
+  
+  .cancel-icon {
+    margin-bottom: 1.5rem;
+    
+    svg {
+      color: #f44336;
+    }
+  }
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+    font-weight: 700;
+  }
+  
+  h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    color: #333;
+    font-weight: 600;
+    text-align: left;
+  }
+  
+  h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 600;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  
+  .cancel-message {
+    font-size: 1.1rem;
+  }
+  
+  .info-box {
+    background-color: #fff8e1;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    text-align: left;
+    border-left: 4px solid #ffc107;
+    
+    ul {
+      padding-left: 1.5rem;
+      margin-bottom: 0;
+      
+      li {
+        margin-bottom: 0.5rem;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  
+  .help-section {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    
+    p {
+      margin-bottom: 0;
+      
+      a {
+        color: #f44336;
+        text-decoration: underline;
+        
+        &:hover {
+          color: #d32f2f;
+        }
+      }
+    }
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    
+    button {
+      padding: 0.875rem 1.75rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &.primary-button {
+        background-color: #f44336;
+        color: white;
+        border: none;
+        
+        &:hover {
+          background-color: #e53935;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(244, 67, 54, 0.2);
+        }
+      }
+      
+      &.secondary-button {
+        background-color: white;
+        color: #333;
+        border: 2px solid #333;
+        
+        &:hover {
+          background-color: #f5f5f5;
+          transform: translateY(-2px);
+        }
+      }
+      
+      &.tertiary-button {
+        background-color: white;
+        color: #757575;
+        border: 1px solid #ddd;
+        
+        &:hover {
+          background-color: #f5f5f5;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+  
+  .redirect-notice {
+    font-size: 0.9rem;
+    color: #999;
+    
+    p {
+      margin-bottom: 0;
+      
+      a {
+        color: #f44336;
+        text-decoration: underline;
+        cursor: pointer;
+        
+        &:hover {
+          color: #d32f2f;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .cancel-card {
+      padding: 1.5rem;
+    }
+    
+    .action-buttons {
+      flex-direction: column;
+      
+      button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+    }
+    
+    h1 {
+      font-size: 1.6rem;
+    }
+    
+    h3 {
+      font-size: 1.2rem;
+    }
+  }
+  

@@ -1,0 +1,9 @@
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-6xl">
+  <div *ngIf="loading" class="col-span-full text-center py-10">Loading featured products...</div>
+  
+  <app-product-card 
+    *ngFor="let product of products" 
+    [product]="product"
+    (addToCart)="addToCart($event)"
+  ></app-product-card>
+</div>

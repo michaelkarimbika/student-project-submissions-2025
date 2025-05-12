@@ -1,0 +1,114 @@
+
+    <div class="container mx-auto py-10 px-4">
+      <a routerLink="/products" class="flex items-center text-sm mb-6 hover:underline">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1">
+          <path d="m12 19-7-7 7-7"/>
+          <path d="M19 12H5"/>
+        </svg>
+        Continue Shopping
+      </a>
+      
+      <div *ngIf="loading" class="text-center py-10">Loading cart...</div>
+      
+      <div *ngIf="!loading && cartItems.length === 0" class="max-w-md mx-auto text-center">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-16 w-16 mx-auto mb-6 text-gray-400">
+          <circle cx="8" cy="21" r="1"/>
+          <circle cx="19" cy="21" r="1"/>
+          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+        </svg>
+        <h1 class="text-2xl font-bold mb-4">Your cart is empty</h1>
+        <p class="text-gray-500 mb-6">Looks like you haven't added any products to your cart yet.</p>
+        <a routerLink="/products">
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+            Browse Products
+          </button>
+        </a>
+      </div>
+      
+      <div *ngIf="!loading && cartItems.length > 0" class="grid lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-lg shadow-md">
+            <div class="p-6 border-b">
+              <h2 class="text-xl font-semibold">Shopping Cart ({{ cartItems.length }} items)</h2>
+            </div>
+            <div class="p-6">
+              <div *ngFor="let item of cartItems" class="flex py-4 border-b last:border-0">
+                <div class="relative h-24 w-24 rounded-md overflow-hidden">
+                  <img [src]="item.product.images" [alt]="item.product.name" class="object-cover w-full h-full">
+                </div>
+                <div class="flex-1 ml-4">
+                  <div class="flex justify-between">
+                    <div>
+                      <h3 class="font-medium">{{ item.product.name }}</h3>
+                      <p class="text-sm text-gray-500 mt-1">\${{ getPrice(item.product.price).toFixed(2) }}</p>
+                    </div>
+                    <p class="font-medium">\${{ (getPrice(item.product.price) * item.quantity).toFixed(2) }}</p>
+                  </div>
+                  <div class="flex items-center justify-between mt-4">
+                    <div class="flex items-center border rounded-md">
+                      <button 
+                        (click)="updateQuantity(item, item.quantity - 1)" 
+                        [disabled]="item.quantity <= 1"
+                        class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
+                      >
+                        -
+                      </button>
+                      <span class="w-8 text-center">{{ item.quantity }}</span>
+                      <button 
+                        (click)="updateQuantity(item, item.quantity + 1)"
+                        class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3"
+                      >
+                        +
+                      </button>
+                    </div>
+                    <button 
+                      (click)="removeItem(item)"
+                      class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 w-9"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+                        <path d="M3 6h18"/>
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+                        <line x1="10" x2="10" y1="11" y2="17"/>
+                        <line x1="14" x2="14" y1="11" y2="17"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div>
+          <div class="bg-white rounded-lg shadow-md">
+            <div class="p-6 border-b">
+              <h2 class="text-xl font-semibold">Order Summary</h2>
+            </div>
+            <div class="p-6">
+              <div class="space-y-4">
+                <div class="flex justify-between">
+                  <span>Subtotal</span>
+                  <span>\${{ subtotal.toFixed(2) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Shipping</span>
+                  <span>\${{ shipping.toFixed(2) }}</span>
+                </div>
+                <div class="border-t pt-4 flex justify-between font-medium">
+                  <span>Total</span>
+                  <span>\${{ total.toFixed(2) }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="p-6 pt-0">
+              <a routerLink="/checkout">
+                <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-full">
+                  Checkout with PesePay
+                </button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

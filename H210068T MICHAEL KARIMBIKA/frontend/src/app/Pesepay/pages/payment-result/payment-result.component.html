@@ -1,0 +1,96 @@
+<div class="payment-success-container">
+    <div class="success-card">
+      <div *ngIf="loading" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading order details...</p>
+      </div>
+  
+      <div *ngIf="!loading && !error" class="success-content">
+        <div class="success-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        
+        <h1>Payment Successful!</h1>
+        <p class="success-message">Thank you for your purchase. Your order has been successfully processed and is now being prepared.</p>
+        
+        <div class="order-details" *ngIf="orderDetails">
+          <h2>Order Summary</h2>
+          <div class="order-info">
+            <p><strong>Order ID:</strong> #{{ orderId }}</p>
+            <p><strong>Date:</strong> {{ orderDetails.created_at | date:'medium' }}</p>
+            <p><strong>Total Amount:</strong> ${{ orderDetails.total_amount | number:'1.2-2' }}</p>
+          </div>
+          
+          <div class="order-items" *ngIf="orderDetails.items && orderDetails.items.length > 0">
+            <h3>Items Purchased</h3>
+            <div class="item" *ngFor="let item of orderDetails.items">
+              <div class="item-details">
+                <p class="item-name">{{ item.product.name }}</p>
+                <p class="item-quantity">Qty: {{ item.quantity }}</p>
+              </div>
+              <p class="item-price">${{ item.price * item.quantity | number:'1.2-2' }}</p>
+            </div>
+          </div>
+          
+          <div class="order-totals">
+            <div class="total-row">
+              <span>Subtotal:</span>
+              <span>${{ orderDetails.subtotal | number:'1.2-2' }}</span>
+            </div>
+            <div class="total-row">
+              <span>Shipping:</span>
+              <span>${{ orderDetails.shipping_cost | number:'1.2-2' }}</span>
+            </div>
+            <div class="total-row grand-total">
+              <span>Total:</span>
+              <span>${{ orderDetails.total_amount | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="next-steps">
+          <h3>What's Next?</h3>
+          <ul>
+            <li>You will receive an order confirmation email shortly.</li>
+            <li>You can track your order status in your account.</li>
+            <li>For any questions, please contact our customer support.</li>
+          </ul>
+        </div>
+        
+        <div class="action-buttons">
+          <button class="primary-button" (click)="redirectToOrderDetails()">View Order Details</button>
+          <button class="secondary-button" (click)="redirectToProducts()">Continue Shopping</button>
+        </div>
+        
+        <div class="redirect-notice" *ngIf="countdown > 0">
+          <p>You will be redirected to the products page in {{ countdown }} seconds... <a href="#" (click)="$event.preventDefault(); stopRedirect()">Stop</a></p>
+        </div>
+      </div>
+  
+      <div *ngIf="!loading && error" class="error-content">
+        <div class="error-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        
+        <h1>Something went wrong</h1>
+        <p class="error-message">{{ errorMessage || "We couldn't find your order details. Please contact customer support if you believe this is an error." }}</p>
+        
+        <div class="action-buttons">
+          <button class="primary-button" (click)="redirectToProducts()">Continue Shopping</button>
+          <button class="secondary-button" routerLink="/contact">Contact Support</button>
+        </div>
+        
+        <div class="redirect-notice" *ngIf="countdown > 0">
+          <p>You will be redirected to the products page in {{ countdown }} seconds... <a href="#" (click)="$event.preventDefault(); stopRedirect()">Stop</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  

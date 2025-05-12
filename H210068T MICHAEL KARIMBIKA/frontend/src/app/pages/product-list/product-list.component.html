@@ -1,0 +1,246 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-8">Products</h1>
+
+  <!-- Search and Filters -->
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-8">
+    <!-- Filters Sidebar -->
+    <div class="lg:col-span-1 bg-white p-6 rounded-lg shadow">
+      <h2 class="text-xl font-semibold mb-4">Filters</h2>
+      
+      <!-- Search -->
+      <div class="mb-6">
+        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+        <div class="flex">
+          <input
+            type="text"
+            id="search"
+            [(ngModel)]="searchQuery"
+            placeholder="Search products..."
+            class="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button
+            (click)="onSearch()"
+            class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Categories -->
+      <div class="mb-6">
+        <h3 class="text-md font-medium text-gray-700 mb-2">Categories</h3>
+        <div class="space-y-2">
+          <div *ngFor="let category of categories" class="flex items-center">
+            <input
+              type="checkbox"
+              [id]="'category-' + category.slug"
+              [checked]="selectedCategories.includes(category.slug)"
+              (change)="onCategoryChange(category.slug, $event)"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label [for]="'category-' + category.slug" class="ml-2 text-sm text-gray-700">{{ category.name }}</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Range -->
+      <div class="mb-6">
+        <h3 class="text-md font-medium text-gray-700 mb-2">Price Range</h3>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label for="min-price" class="block text-xs text-gray-500 mb-1">Min ($)</label>
+            <input
+              type="number"
+              id="min-price"
+              [(ngModel)]="priceRange.min"
+              min="0"
+              (change)="onPriceChange()"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <label for="max-price" class="block text-xs text-gray-500 mb-1">Max ($)</label>
+            <input
+              type="number"
+              id="max-price"
+              [(ngModel)]="priceRange.max"
+              min="0"
+              (change)="onPriceChange()"
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Rating -->
+      <div class="mb-6">
+        <h3 class="text-md font-medium text-gray-700 mb-2">Minimum Rating</h3>
+        <select
+          [(ngModel)]="selectedRating"
+          (change)="onRatingChange()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option [ngValue]="null">Any Rating</option>
+          <option [ngValue]="5">5 Stars</option>
+          <option [ngValue]="4">4+ Stars</option>
+          <option [ngValue]="3">3+ Stars</option>
+          <option [ngValue]="2">2+ Stars</option>
+          <option [ngValue]="1">1+ Star</option>
+        </select>
+      </div>
+      
+      <!-- Country Filter -->
+      <div class="mb-6">
+        <h3 class="text-md font-medium text-gray-700 mb-2">Country</h3>
+        <div class="mb-2" *ngIf="userCountry">
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="local-only"
+              [(ngModel)]="showLocalOnly"
+              (change)="onLocalOnlyChange()"
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+            />
+            <label for="local-only" class="ml-2 text-sm text-gray-700">
+              Show only from {{ getCountryName(userCountry) }}
+            </label>
+          </div>
+        </div>
+        <select
+          [(ngModel)]="selectedCountry"
+          (change)="onCountryChange()"
+          [disabled]="showLocalOnly"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option [ngValue]="null">All Countries</option>
+          <option *ngFor="let country of countries" [value]="country.code">{{ country.name }}</option>
+        </select>
+      </div>
+      
+      <!-- Season Filter -->
+      <div class="mb-6">
+        <h3 class="text-md font-medium text-gray-700 mb-2">Season</h3>
+        <div class="mb-2" *ngIf="currentSeason">
+          <button 
+            (click)="loadCurrentSeasonProducts()" 
+            class="text-sm text-blue-600 hover:text-blue-800 flex items-center"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />  stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Show {{ currentSeason.name }} Products
+          </button>
+        </div>
+        <select
+          [(ngModel)]="selectedSeason"
+          (change)="onSeasonChange()"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option [ngValue]="null">All Seasons</option>
+          <optgroup label="Northern Hemisphere">
+            <option *ngFor="let season of seasons" [value]="season.id" [hidden]="season.hemisphere !== 'N'">
+              {{ season.name }}
+            </option>
+          </optgroup>
+          <optgroup label="Southern Hemisphere">
+            <option *ngFor="let season of seasons" [value]="season.id" [hidden]="season.hemisphere !== 'S'">
+              {{ season.name }}
+            </option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- Clear Filters -->
+      <button
+        (click)="clearFilters()"
+        class="w-full bg-gray-200 text-gray-800 px-4 py-2 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+      >
+        Clear Filters
+      </button>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="lg:col-span-3">
+      <!-- Sort Options -->
+      <div class="flex justify-between items-center mb-6">
+        <div class="text-sm text-gray-500">
+          Showing {{ (currentPage - 1) * itemsPerPage + 1 }}-{{ Math.min(currentPage * itemsPerPage, totalCount) }} of {{ totalCount }} products
+        </div>
+        <div class="flex items-center">
+          <label for="sort" class="text-sm text-gray-700 mr-2">Sort by:</label>
+          <select
+            id="sort"
+            [(ngModel)]="sortOption"
+            (change)="onSortChange()"
+            class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="featured">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+            <option value="newest">Newest</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="flex justify-center items-center h-64">
+        <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+
+      <!-- Products Grid -->
+      <div *ngIf="!loading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <app-product-card 
+          *ngFor="let product of products" 
+          [product]="product"
+          [userCountry]="userCountry"
+          (addToCartEvent)="handleAddToCart($event)"
+        ></app-product-card>
+      </div>
+
+      <!-- No Products Found -->
+      <div *ngIf="!loading && products.length === 0" class="flex flex-col items-center justify-center h-64">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="text-lg font-medium text-gray-900 mb-1">No products found</h3>
+        <p class="text-gray-500">Try adjusting your filters or search query</p>
+      </div>
+
+      <!-- Pagination -->
+      <div *ngIf="!loading && totalPages > 1" class="flex justify-center mt-8">
+        <nav class="flex items-center">
+          <button
+            (click)="goToPage(currentPage - 1)"
+            [disabled]="currentPage === 1"
+            class="px-3 py-1 rounded-md mr-2 bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Previous
+          </button>
+          
+          <div *ngFor="let page of getPageNumbers()">
+            <button
+              *ngIf="page !== '...'"
+              (click)="goToPage(page)"
+              [class]="page === currentPage ? 'px-3 py-1 rounded-md mx-1 bg-blue-600 text-white' : 'px-3 py-1 rounded-md mx-1 bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'"
+            >
+              {{ page }}
+            </button>
+            <span *ngIf="page === '...'" class="px-3 py-1 mx-1">...</span>
+          </div>
+          
+          <button
+            (click)="goToPage(currentPage + 1)"
+            [disabled]="currentPage === totalPages"
+            class="px-3 py-1 rounded-md ml-2 bg-white border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>

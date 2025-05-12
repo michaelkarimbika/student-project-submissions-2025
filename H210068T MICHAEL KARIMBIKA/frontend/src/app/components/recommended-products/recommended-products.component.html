@@ -1,0 +1,87 @@
+
+    <div class="w-full max-w-6xl">
+      <div *ngIf="loading" class="text-center py-10">Loading recommendations...</div>
+      
+      <div *ngIf="!loading && !isLoggedIn" class="bg-white p-6 text-center rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4">Sign in to see personalized recommendations</h3>
+        <p class="text-gray-500 mb-6">
+          Create an account or log in to get product recommendations tailored to your preferences.
+        </p>
+        <div class="flex justify-center gap-4">
+          <a routerLink="/login">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+              Login
+            </button>
+          </a>
+          <a routerLink="/register">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+              Register
+            </button>
+          </a>
+        </div>
+      </div>
+      
+      <div *ngIf="!loading && isLoggedIn" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div *ngFor="let product of products" class="bg-white rounded-lg shadow-md overflow-hidden">
+          <div class="aspect-square relative">
+            <img [src]="product.image || '/assets/placeholder.svg'" [alt]="product.name" class="object-cover w-full h-full">
+            <div *ngIf="product.matchScore" class="absolute top-2 right-2 bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+              {{ product.matchScore }}% Match
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">{{ product.name }}</h3>
+            <div class="flex items-center justify-between mt-2">
+              <span class="font-bold\">${{ product.price?.toFixed(2) }}</span>
+              <div class="flex items-center">
+                <span class="text-yellow-500">★</span>
+                <span class="text-sm ml-1">{{ product.rating }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="p-4 pt-0 flex justify-between">
+            <a [routerLink]="['/products', product.id]">
+              <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-3">
+                View Details
+              </button>
+            </a>
+            <button (click)="addToCart(product)" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
+                <circle cx="8" cy="21" r="1"/>
+                <circle cx="19" cy="21" r="1"/>
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+              </svg>
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div> <div class="w-full max-w-6xl">
+      <div *ngIf="loading" class="text-center py-10">Loading recommendations...</div>
+      
+      <div *ngIf="!loading && !isLoggedIn" class="bg-white p-6 text-center rounded-lg shadow-md">
+        <h3 class="text-xl font-semibold mb-4">Sign in to see personalized recommendations</h3>
+        <p class="text-gray-500 mb-6">
+          Create an account or log in to get product recommendations tailored to your preferences.
+        </p>
+        <div class="flex justify-center gap-4">
+          <a routerLink="/login">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2">
+              Login
+            </button>
+          </a>
+          <a routerLink="/register">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+              Register
+            </button>
+          </a>
+        </div>
+      </div>
+      
+      <div *ngIf="!loading && isLoggedIn" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <app-product-card 
+          *ngFor="let product of products" 
+          [product]="product"
+          (addToCart)="addToCart($event)"
+        ></app-product-card>
+      </div>

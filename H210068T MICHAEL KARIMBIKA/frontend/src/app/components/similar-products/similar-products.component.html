@@ -1,0 +1,11 @@
+<div *ngIf="loading" class="text-center py-6">Loading similar products...</div>
+  
+<div *ngIf="!loading && similarProducts.length === 0" class="text-center py-6">No similar products found</div>
+
+<div *ngIf="!loading && similarProducts.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+  <app-product-card 
+    *ngFor="let product of similarProducts" 
+    [product]="product"
+    (addToCart)="addToCart(similarProducts)"
+  ></app-product-card>
+</div>

@@ -1,0 +1,94 @@
+<header class="bg-white dark:bg-gray-800 border-b sticky top-0 z-10">
+  <div class="container mx-auto flex h-16 items-center justify-between py-4 px-4">
+    <div class="flex items-center gap-6">
+      <a routerLink="/" class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+          <circle cx="8" cy="21" r="1"/>
+          <circle cx="19" cy="21" r="1"/>
+          <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+        </svg>
+        <span class="font-bold dark:text-white">ShopSmart</span>
+      </a>
+      <nav class="hidden md:flex gap-6">
+        <a routerLink="/products" routerLinkActive="text-primary" class="text-sm font-medium hover:underline underline-offset-4 dark:text-gray-200">
+          Products
+        </a>
+        <a routerLink="/categories" routerLinkActive="text-primary" class="text-sm font-medium hover:underline underline-offset-4 dark:text-gray-200">
+          Categories
+        </a>
+        <a routerLink="/about" routerLinkActive="text-primary" class="text-sm font-medium hover:underline underline-offset-4 dark:text-gray-200">
+          About
+        </a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <button (click)="toggleDarkMode()" class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
+        <svg *ngIf="!isDarkMode" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2"/>
+          <path d="M12 20v2"/>
+          <path d="m4.93 4.93 1.41 1.41"/>
+          <path d="m17.66 17.66 1.41 1.41"/>
+          <path d="M2 12h2"/>
+          <path d="M20 12h2"/>
+          <path d="m6.34 17.66-1.41 1.41"/>
+          <path d="m19.07 4.93-1.41 1.41"/>
+        </svg>
+        <svg *ngIf="isDarkMode" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+        </svg>
+        <span class="sr-only">Toggle theme</span>
+      </button>
+      
+      <a routerLink="/cart" class="relative">
+        <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 w-10 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+            <circle cx="8" cy="21" r="1"/>
+            <circle cx="19" cy="21" r="1"/>
+            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+          </svg>
+          <span class="sr-only">Cart</span>
+        </button>
+        <span *ngIf="cartItemCount > 0" class="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+          {{ cartItemCount }}
+        </span>
+      </a>
+      <ng-container *ngIf="!isLoggedIn; else userMenu">
+        <a routerLink="/login">
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600">
+            Login
+          </button>
+        </a>
+        <a routerLink="/register">
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+            Register
+          </button>
+        </a>
+      </ng-container>
+      <ng-template #userMenu>
+        <div class="relative">
+          <button (click)="toggleDropdown()" class="inline-flex items-center justify-center rounded-full border border-input w-8 h-8 overflow-hidden">
+            <img src="/assets/placeholder-user.jpg" alt="User avatar" class="w-full h-full object-cover" />
+          </button>
+          <div *ngIf="showDropdown" class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 py-1">
+            <div *ngIf="userCountry" class="px-4 py-2 text-sm text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-gray-700">
+              <span class="block font-medium text-gray-900 dark:text-white">{{ userName }}</span>
+              <span class="flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-3 w-3">
+                  <path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/>
+                  <circle cx="12" cy="10" r="3"/>
+                </svg>
+                {{ userCountry }}
+              </span>
+            </div>
+            <a routerLink="/profile" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Profile</a>
+            <a routerLink="/orders" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Orders</a>
+            <button (click)="logout()" class="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+              Logout
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</header>

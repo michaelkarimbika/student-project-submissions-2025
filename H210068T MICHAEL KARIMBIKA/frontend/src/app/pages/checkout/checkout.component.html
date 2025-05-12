@@ -1,0 +1,116 @@
+
+    <div class="container mx-auto py-10 px-4">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-2xl font-bold mb-6">Checkout</h1>
+        
+        <div *ngIf="loading" class="text-center py-10">Loading checkout...</div>
+        
+        <div *ngIf="!loading && cartItems.length === 0" class="text-center py-10">
+          <p class="mb-4">Your cart is empty. Please add items to your cart before checking out.</p>
+          <a routerLink="/products">
+            <button class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2">
+              Browse Products
+            </button>
+          </a>
+        </div>
+        
+        <div *ngIf="!loading && cartItems.length > 0" class="grid md:grid-cols-2 gap-8">
+          <div>
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+              <h2 class="text-lg font-semibold mb-4">Shipping Information</h2>
+              <div class="space-y-4">
+                <div>
+                  <label for="fullName" class="block text-sm font-medium mb-1">Full Name</label>
+                  <input 
+                    type="text" 
+                    id="fullName" 
+                    [(ngModel)]="shippingInfo.full_name" 
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="email" class="block text-sm font-medium mb-1">Email</label>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    [(ngModel)]="shippingInfo.email" 
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full"
+                    required
+                  />
+                </div>
+                <div>
+                  <label for="address" class="block text-sm font-medium mb-1">Address</label>
+                  <textarea 
+                    id="address" 
+                    [(ngModel)]="shippingInfo.address" 
+                    class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    required
+                  ></textarea>
+                </div>
+                <div>
+                  <label for="phone" class="block text-sm font-medium mb-1">Phone</label>
+                  <input 
+                    type="tel" 
+                    id="phone" 
+                    [(ngModel)]="shippingInfo.phone" 
+                    class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 w-full"
+                    required
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <h2 class="text-lg font-semibold mb-4">Payment Method</h2>
+              <p class="mb-4">This order will be processed securely via PesePay.</p>
+              <div class="flex items-center space-x-2 mb-4">
+                <input type="checkbox" id="terms" [(ngModel)]="termsAccepted" class="rounded border-gray-300 text-primary focus:ring-primary" />
+                <label for="terms" class="text-sm">
+                  I agree to the Terms of Service and Privacy Policy
+                </label>
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <h2 class="text-lg font-semibold mb-4">Order Summary</h2>
+              <div class="space-y-4 mb-6">
+                <div *ngFor="let item of cartItems" class="flex justify-between">
+                  <span>{{ item.product.name }} × {{ item.quantity }}</span>\
+                  <span>${{ (getPrice(item.product.price) * item.quantity).toFixed(2) }}</span>
+                </div>
+                <div class="border-t pt-4 flex justify-between">
+                  <span>Subtotal</span>
+                  <span>${{ subtotal.toFixed(2) }}</span>
+                </div>
+                <div class="flex justify-between">
+                  <span>Shipping</span>
+                  <span>${{ shipping.toFixed(2) }}</span>
+                </div>
+                <div class="border-t pt-4 flex justify-between font-medium">
+                  <span>Total</span>
+                  <span>${{ total.toFixed(2) }}</span>
+                </div>
+              </div>
+              
+              <button 
+                (click)="placeOrder()" 
+                [disabled]="!isFormValid() || processing"
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 w-full"
+              >
+                {{ processing ? 'Processing...' : 'Place Order with PesePay' }}
+              </button>
+              
+              <div *ngIf="errorMessage" class="mt-4 p-3 bg-red-100 text-red-800 rounded-md text-sm">
+                {{ errorMessage }}
+              </div>
+             
+            </div>
+            
+
+          </div>
+        </div>
+      </div>
+    </div>

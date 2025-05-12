@@ -1,0 +1,81 @@
+<div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+  <!-- Product Image -->
+  <div class="aspect-square relative overflow-hidden">
+    <img 
+      [src]="getImageUrl(product.primary_image)" 
+      [alt]="product.name" 
+      class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+    />
+    
+    <!-- Badges Container -->
+    <div class="absolute top-2 left-2 flex flex-col gap-1">
+      <!-- Featured Badge -->
+      <div *ngIf="product.featured" class="bg-primary text-white text-xs font-bold px-2 py-1 rounded-full">
+        Featured
+      </div>
+      
+      <!-- Country Badge -->
+      <span *ngIf="product.available_countries" 
+            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+            [ngClass]="{'bg-green-100 text-green-800': isLocalProduct, 'bg-gray-100 text-gray-800': !isLocalProduct}">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+        </svg>
+        {{ countryCode }}
+      </span>
+      
+      <!-- Season Badge -->
+      <span *ngIf="product.seasons && product.seasons.length > 0" 
+            class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+            [ngClass]="{'bg-orange-100 text-orange-800': isInSeason, 'bg-gray-100 text-gray-800': !isInSeason}">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        {{ seasonName }}
+      </span>
+    </div>
+  </div>
+  
+  <!-- Product Info -->
+  <div class="p-4">
+    <h3 class="text-lg font-semibold text-gray-900 mb-1">{{ product.name }}</h3>
+    <div class="flex items-center mb-2">
+      <div class="flex">
+        <ng-container *ngFor="let i of [1, 2, 3, 4, 5]">
+          <svg 
+            [ngClass]="{'text-yellow-400 fill-yellow-400': i <= product.rating, 'text-gray-300': i > product.rating}"
+            xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+          </svg>
+        </ng-container>
+      </div>
+      <span class="text-xs text-gray-500 ml-1">
+        ({{ product.review_count }})
+      </span>
+    </div>
+    <p class="text-gray-500 text-sm mb-2">{{ product.category_name }}</p>
+    <div class="flex items-center justify-between">
+      <span class="text-lg font-bold text-gray-900">${{getPrice(product.price).toFixed(2)}}</span>
+      <span *ngIf="product.stock <= 5" class="text-xs text-red-600">
+        Only {{ product.stock }} left!
+      </span>
+    </div>
+  </div>
+  
+  <!-- Product Actions -->
+  <div class="p-4 pt-0 flex justify-between">
+    <a [routerLink]="['/products/slug', product.slug]" class="inline-flex items-center justify-center rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+      View Details
+    </a>
+    <button 
+      (click)="addToCart()"
+      [disabled]="product.stock <= 0"
+      class="inline-flex items-center justify-center rounded-md bg-primary px-3 py-2 text-sm font-medium text-white hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+      {{ product.stock > 0 ? 'Add to Cart' : 'Out of Stock' }}
+    </button>
+  </div>
+</div>
